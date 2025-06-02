@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="page active">
+        <div class="container">
+            <div class="login-wrapper">
+                <div class="card">
+                    <div class="card__body">
+                        <h2 class="login-title">Personal Finance Tracker</h2>
+                        <form id="login-form" class="login-form">
+                            <div class="form-group">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" id="username" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+                            <div id="login-error" class="error-message hidden"></div>
+                            <div class="demo-credentials">
+                                <p><strong>Demo Credentials:</strong></p>
+                                <p>Username: admin</p>
+                                <p>Password: password123</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="page">
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-content">
+                    <h3 class="navbar-brand">Finance Tracker</h3>
+                    <div class="navbar-nav">
+                        <button class="nav-link active" data-page="dashboard">Dashboard</button>
+                        <button class="nav-link" data-page="transactions">Transactions</button>
+                        <button class="nav-link" data-page="budgets">Budgets</button>
+                        <button class="btn btn--outline btn--sm" id="logout-btn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="dashboard-content">
+                <h1>Dashboard</h1>
+                
+                <!-- Summary Cards -->
+                <div class="summary-grid">
+                    <div class="card">
+                        <div class="card__body">
+                            <h4>Current Balance</h4>
+                            <p class="summary-value" id="current-balance">$0.00</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card__body">
+                            <h4>Monthly Income</h4>
+                            <p class="summary-value income" id="monthly-income">$0.00</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card__body">
+                            <h4>Monthly Expenses</h4>
+                            <p class="summary-value expense" id="monthly-expenses">$0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-grid">
+                    <div class="card">
+                        <div class="card__body">
+                            <h4>Spending by Category</h4>
+                            <div class="chart-container">
+                                <canvas id="expense-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card__body">
+                            <h4>Recent Transactions</h4>
+                            <div id="recent-transactions"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions Page -->
+    <div id="transactions-page" class="page">
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-content">
+                    <h3 class="navbar-brand">Finance Tracker</h3>
+                    <div class="navbar-nav">
+                        <button class="nav-link" data-page="dashboard">Dashboard</button>
+                        <button class="nav-link active" data-page="transactions">Transactions</button>
+                        <button class="nav-link" data-page="budgets">Budgets</button>
+                        <button class="btn btn--outline btn--sm" id="logout-btn-trans">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="transactions-content">
+                <div class="flex justify-between items-center">
+                    <h1>Transactions</h1>
+                    <button class="btn btn--primary" id="add-transaction-btn">Add Transaction</button>
+                </div>
+
+                <!-- Transaction Form -->
+                <div id="transaction-form-wrapper" class="hidden">
+                    <div class="card">
+                        <div class="card__body">
+                            <h4 id="form-title">Add Transaction</h4>
+                            <form id="transaction-form">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="trans-amount" class="form-label">Amount</label>
+                                        <input type="number" id="trans-amount" class="form-control" step="0.01" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="trans-type" class="form-label">Type</label>
+                                        <select id="trans-type" class="form-control" required>
+                                            <option value="expense">Expense</option>
+                                            <option value="income">Income</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="trans-category" class="form-label">Category</label>
+                                        <select id="trans-category" class="form-control" required>
+                                            <option value="Food">Food</option>
+                                            <option value="Transportation">Transportation</option>
+                                            <option value="Housing">Housing</option>
+                                            <option value="Entertainment">Entertainment</option>
+                                            <option value="Healthcare">Healthcare</option>
+                                            <option value="Shopping">Shopping</option>
+                                            <option value="Utilities">Utilities</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="trans-date" class="form-label">Date</label>
+                                        <input type="date" id="trans-date" class="form-control" required>
+                                    </div>
+                                    <div class="form-group form-group-full">
+                                        <label for="trans-description" class="form-label">Description</label>
+                                        <input type="text" id="trans-description" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn--primary">Save Transaction</button>
+                                    <button type="button" class="btn btn--secondary" id="cancel-transaction">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions List -->
+                <div class="card">
+                    <div class="card__body">
+                        <h4>All Transactions</h4>
+                        <div id="transactions-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Budgets Page -->
+    <div id="budgets-page" class="page">
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-content">
+                    <h3 class="navbar-brand">Finance Tracker</h3>
+                    <div class="navbar-nav">
+                        <button class="nav-link" data-page="dashboard">Dashboard</button>
+                        <button class="nav-link" data-page="transactions">Transactions</button>
+                        <button class="nav-link active" data-page="budgets">Budgets</button>
+                        <button class="btn btn--outline btn--sm" id="logout-btn-budget">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="budgets-content">
+                <h1>Budget Management</h1>
+                
+                <!-- Budget Form -->
+                <div class="card">
+                    <div class="card__body">
+                        <h4>Set Monthly Budget</h4>
+                        <form id="budget-form">
+                            <div class="form-grid-budget">
+                                <div class="form-group">
+                                    <label for="budget-category" class="form-label">Category</label>
+                                    <select id="budget-category" class="form-control" required>
+                                        <option value="Food">Food</option>
+                                        <option value="Transportation">Transportation</option>
+                                        <option value="Housing">Housing</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Healthcare">Healthcare</option>
+                                        <option value="Shopping">Shopping</option>
+                                        <option value="Utilities">Utilities</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="budget-amount" class="form-label">Budget Amount</label>
+                                    <input type="number" id="budget-amount" class="form-control" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn--primary">Set Budget</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Budget Overview -->
+                <div id="budget-overview"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
